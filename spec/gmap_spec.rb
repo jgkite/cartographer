@@ -19,8 +19,13 @@ describe Cartographer::Gmap do
   it "should initialise the map with option for disabling dragging" do
     map = Cartographer::Gmap.new('map',{:draggable => false})
     map.to_s.should include("map.draggable = false;")
-
   end
+  
+  it "should initialise the map with option for disabling all default map controls" do
+    map = Cartographer::Gmap.new('map',{:disable_default_ui => true})
+    map.to_s.should include("map.disableDefaultUI = true;")
+  end
+  
   it "should initialise the map with option for center & zoom" do
     map = Cartographer::Gmap.new('map',{:center => [12,14],:zoom=> 10})
     map.to_s.should include("map.setCenter(new google.maps.LatLng(12, 14));map.setZoom(10);")

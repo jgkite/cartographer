@@ -52,6 +52,7 @@ class Cartographer::Gmap
     @controls  = opts[:controls] || [ :zoom ]
     @center    = opts[:center] || [0,0]
     @zoom      = opts[:zoom] || 1
+    @disable_default_ui = opts[:disable_default_ui]
     
     @debug = opts[:debug]
     
@@ -114,6 +115,7 @@ class Cartographer::Gmap
 #{@dom_id} = new google.maps.Map(document.getElementById(\"#{@dom_id}\"),{center: new google.maps.LatLng(0, 0), zoom: 0, mapTypeId: google.maps.MapTypeId.ROADMAP});"
 
     html << "  #{@dom_id}.draggable = false;" if @draggable == false
+    html << "  #{@dom_id}.disableDefaultUI = true;" if @disable_default_ui
     
     if( @zoom == :bound )
       sw_ne = self.bounding_points
