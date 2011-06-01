@@ -25,7 +25,8 @@
 class Cartographer::Gmap
   
   attr_accessor :dom_id, :draggable, :polylines,:type, :controls,
-  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker, :marker_clusterer, :shared_info_window, :marker_clusterer_icons, :disable_default_ui
+  :markers, :center, :zoom, :icons, :debug, :marker_mgr, :current_marker, :marker_clusterer, :shared_info_window, :marker_clusterer_icons, 
+  :disable_default_ui, :pan_control, :zoom_control, :map_type_control, :scale_control, :street_view_control, :overview_map_control
 
 
 
@@ -47,12 +48,18 @@ class Cartographer::Gmap
   def initialize(dom_id, opts = {}, &block)
     @dom_id = dom_id
 
-    @draggable = opts[:draggable]
-    @type      = opts[:type] || :roadmap
-    @controls  = opts[:controls] || [ :zoom ]
-    @center    = opts[:center] || [0,0]
-    @zoom      = opts[:zoom] || 1
-    @disable_default_ui = opts[:disable_default_ui]
+    @draggable            = opts[:draggable]
+    @type                 = opts[:type] || :roadmap
+    @controls             = opts[:controls] || [ :zoom ]
+    @center               = opts[:center] || [0,0]
+    @zoom                 = opts[:zoom] || 1
+    @disable_default_ui   = opts[:disable_default_ui]
+    @pan_control          = opts[:pan_control]        
+    @zoom_control         = opts[:zoom_control]       
+    @map_type_control     = opts[:map_type_control]   
+    @scale_control        = opts[:scale_control]      
+    @street_view_control  = opts[:street_view_control]
+    @overview_map_control = opts[:overview_map_control]
     
     @debug = opts[:debug]
     
@@ -115,7 +122,13 @@ class Cartographer::Gmap
 #{@dom_id} = new google.maps.Map(document.getElementById(\"#{@dom_id}\"),{center: new google.maps.LatLng(0, 0), zoom: 0, mapTypeId: google.maps.MapTypeId.ROADMAP});"
 
     html << "  #{@dom_id}.draggable = false;" if @draggable == false
-    html << "  #{@dom_id}.disableDefaultUI = true;" if @disable_default_ui
+    html << "  #{@dom_id}.disableDefaultUI   = true;" if @disable_default_ui
+    html << "  #{@dom_id}.panControl         = #{@pan_control};" if !@pan_control.nil?
+    html << "  #{@dom_id}.zoomControl        = #{@zoom_control};" if !@zoom_control.nil?
+    html << "  #{@dom_id}.mapTypeControl     = #{@map_type_control};" if !@map_type_control.nil?
+    html << "  #{@dom_id}.scaleControl       = #{@scale_control};" if !@scale_control.nil?
+    html << "  #{@dom_id}.streetViewControl  = #{@street_view_control};" if !@street_view_control.nil?
+    html << "  #{@dom_id}.overviewMapControl = #{@overview_map_control};" if !@overview_map_control.nil?
     
     if( @zoom == :bound )
       sw_ne = self.bounding_points

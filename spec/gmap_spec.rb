@@ -26,6 +26,21 @@ describe Cartographer::Gmap do
     map.to_s.should include("map.disableDefaultUI = true;")
   end
   
+  it "should initialise the map with option for turning off panControl" do
+    map = Cartographer::Gmap.new('map',{:pan_control => false})
+    map.to_s.should include("map.panControl = false;")
+  end
+
+  it "should initialise the map with option for turning on panControl" do
+    map = Cartographer::Gmap.new('map',{:pan_control => true})
+    map.to_s.should include("map.panControl = true;")
+  end
+  
+  it "should initialise the map ignoring panControl if it's not set" do
+    map = Cartographer::Gmap.new('map')
+    map.to_s.should_not include("map.panControl")
+  end
+  
   it "should initialise the map with option for center & zoom" do
     map = Cartographer::Gmap.new('map',{:center => [12,14],:zoom=> 10})
     map.to_s.should include("map.setCenter(new google.maps.LatLng(12, 14));map.setZoom(10);")
